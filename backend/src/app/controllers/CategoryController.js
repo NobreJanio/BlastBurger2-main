@@ -5,7 +5,7 @@ class CategoryController {
   async store(request, response) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
-      category_id: Yup.number().nullable()
+      category_id: Yup.string().nullable()
     })
 
     try {
@@ -48,7 +48,7 @@ class CategoryController {
   async update(request, response) {
     const schema = Yup.object().shape({
       name: Yup.string(),
-      category_id: Yup.number().nullable()
+      category_id: Yup.string().nullable()
     })
 
     try {

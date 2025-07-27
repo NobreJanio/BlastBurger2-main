@@ -12,7 +12,19 @@ class Database {
   }
 
   init() {
-    this.connection = new Sequelize(databaseConfig)
+    // Se há uma URL, use-a diretamente; caso contrário, use o objeto de configuração
+    if (databaseConfig.url) {
+      this.connection = new Sequelize(databaseConfig.url, {
+        dialect: databaseConfig.dialect,
+        dialectOptions: databaseConfig.dialectOptions,
+        pool: databaseConfig.pool,
+        define: databaseConfig.define,
+        logging: databaseConfig.logging,
+      })
+    } else {
+      this.connection = new Sequelize(databaseConfig)
+    }
+    
     models.map((model) => model.init(this.connection))
     models.forEach((model) => {
       if (model.associate) {

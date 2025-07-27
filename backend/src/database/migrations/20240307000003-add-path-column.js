@@ -1,13 +1,10 @@
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-    async up(queryInterface, Sequelize) {
-      await queryInterface.addColumn('categories', 'path', {
-        type: Sequelize.STRING,
-      });
-    },
-  
-    async down(queryInterface) {
-      await queryInterface.removeColumn('categories', 'path');
-    },
-  };
+export const up = async (queryInterface, Sequelize) => {
+  await queryInterface.addColumn('categories', 'path', {
+    type: Sequelize.STRING,
+  });
+}
+
+export const down = async (queryInterface) => {
+  await queryInterface.removeColumn('categories', 'path');
+}
   

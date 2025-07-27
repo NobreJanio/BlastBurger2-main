@@ -13,26 +13,8 @@ const api = axios.create({
 });
 
 async function seed() {
-  for (const category of categories) {
-    const categoryForm = new FormData();
-
-    categoryForm.append('name', category.name);
-    categoryForm.append('file', fs.createReadStream(category.file));
-
-    try {
-      const { data: createdCategory } = await api.post('/categories', categoryForm, {
-        headers: {
-          ...categoryForm.getHeaders(),
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-
-      console.log(createdCategory);
-    } catch (err) {
-      console.log(err);
-      process.exit();
-    }
-  }
+  // Skip category creation since they already exist
+  console.log('Skipping category creation - categories already exist');
 
   for (const product of products) {
     const productForm = new FormData();
@@ -50,10 +32,11 @@ async function seed() {
         }
       });
 
-      console.log(createdProduct);
+      console.log(`Created product: ${createdProduct.name}`);
     } catch (err) {
-      console.log(err);
-      process.exit();
+      console.log(`Error creating product: ${product.name}`);
+      console.log(err.response?.data || err.message);
+      // Don't exit on error, continue with next product
     }
   }
 }

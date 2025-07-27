@@ -4,7 +4,7 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:17-alpine
-    container_name: blastburger-postgres-new
+    container_name: blastburger-postgres
     restart: unless-stopped
     ports:
       - '5436:5432'  # Porta externa diferente da atual (5435)
@@ -25,7 +25,7 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:7-jammy
-    container_name: blastburger-mongodb-new
+    container_name: blastburger-mongodb
     restart: unless-stopped
     ports:
       - '27020:27017'  # Porta externa diferente da atual (27019)
@@ -56,6 +56,11 @@ services:
       - POSTGRES_URL=postgres://postgres:POSTGRES@postgres:5432/blastburger
       - MONGODB_URL=mongodb://mongodb:27017/blastburger
       - JWT_SECRET=ee340648e62b127fd0b0b12b614464c2830230e5c8472856f28c759b713d069a6432030d0e11d58af24d66b7fb59894c37657b16e134c91bb3aa742bac81a5d8
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASS=POSTGRES
+      - DB_NAME=blastburger
+      - DB_PORT=5432
     volumes:
       - ./backend:/app
       - /app/node_modules

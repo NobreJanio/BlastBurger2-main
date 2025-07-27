@@ -18,6 +18,7 @@ export default class User extends Model {
       },
       {
         sequelize,
+        tableName: 'users',
       }
     )
 
