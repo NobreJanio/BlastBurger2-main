@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+:root {
+  font-family: 'Roboto', 'Arial', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: #ffffff;
+  background-color: #1a1a1a;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Variáveis de cores para hamburgueria */
+  --primary-orange: #ff5722;
+  --primary-yellow: #ffc107;
+  --dark-brown: #2d1810;
+  --light-brown: #3a2317;
+  --cream: #fff8e1;
+  --dark-bg: #1a1a1a;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-yellow);
+  text-decoration: inherit;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-orange);
+}
+
+body {
+  margin: 0;
+  display: block;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-brown) 50%, var(--dark-bg) 100%);
+  color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fredoka One', 'Impact', 'Arial Black', sans-serif;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: var(--primary-yellow);
+}
+
+button {
+  border-radius: 25px;
+  border: 2px solid var(--primary-yellow);
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  font-weight: 700;
+  font-family: inherit;
+  background: linear-gradient(135deg, var(--primary-orange) 0%, #ff3d00 100%);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+}
+
+button:hover {
+  border-color: #ffeb3b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 87, 34, 0.5);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary-yellow);
+  outline-offset: 2px;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-brown);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-yellow));
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #ff3d00, #ffeb3b);
+}
+
+/* Animações globais */
+@keyframes sizzle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.sizzle {
+  animation: sizzle 2s infinite;
+}
+
+/* Efeito de fogo para elementos especiais */
+@keyframes fire {
+  0%, 100% { 
+    text-shadow: 
+      0 0 5px var(--primary-orange),
+      0 0 10px var(--primary-orange),
+      0 0 15px var(--primary-orange);
+  }
+  50% { 
+    text-shadow: 
+      0 0 10px var(--primary-yellow),
+      0 0 20px var(--primary-yellow),
+      0 0 30px var(--primary-yellow);
+  }
+}
+
+.fire-effect {
+  animation: fire 2s infinite;
+}

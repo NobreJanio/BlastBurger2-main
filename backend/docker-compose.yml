@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: blastburger-postgres
+    restart: unless-stopped
+    ports:
+      - '5435:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=POSTGRES
+      - POSTGRES_DB=blastburger
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - blastburger-network
+
+  mongodb:
+    image: mongo:7-jammy
+    container_name: blastburger-mongodb
+    restart: unless-stopped
+    ports:
+      - '27019:27017'
+    environment:
+      - MONGO_INITDB_DATABASE=blastburger
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - blastburger-network
+
+networks:
+  blastburger-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  mongodb_data:
+    driver: local
