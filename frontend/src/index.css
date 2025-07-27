@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Roboto:wght@300;400;500;700;900&display=swap');
+/* Usando fontes do sistema para evitar problemas de CORS */
 
 :root {
-  font-family: 'Roboto', 'Arial', sans-serif;
+  font-family: 'Arial', 'Helvetica', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -44,9 +44,10 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Fredoka One', 'Impact', 'Arial Black', sans-serif;
+  font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-weight: 900;
 }
 
 h1 {

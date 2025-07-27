@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import Order from '../models/Order.js'
+import Order from '../schemas/Order.js'
 
 class OrderController {
   async store(request, response) {
