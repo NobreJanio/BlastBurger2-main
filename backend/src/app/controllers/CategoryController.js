@@ -1,11 +1,11 @@
 import * as Yup from 'yup'
-import Category from '../models/Category.js'
+import { v4 } from 'uuid'
+import Category from '../schemas/Category.js'
 
 class CategoryController {
   async store(request, response) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
-      category_id: Yup.string().nullable()
     })
 
     try {
@@ -14,12 +14,12 @@ class CategoryController {
       return response.status(400).json({ error: err.errors })
     }
 
-    const { name, category_id } = request.body
+    const { name } = request.body
     const { filename: path } = request.file || {}
 
     const category = await Category.create({
+      id: v4(),
       name,
-      category_id,
       path,
     })
 
@@ -28,15 +28,7 @@ class CategoryController {
 
   async index(request, response) {
     try {
-      const categories = await Category.findAll({
-        include: [
-          {
-            model: Category,
-            as: 'subcategories',
-            attributes: ['id', 'name'],
-          },
-        ],
-      })
+      const categories = await Category.find({})
 
       return response.json(categories)
     } catch (err) {
@@ -48,7 +40,6 @@ class CategoryController {
   async update(request, response) {
     const schema = Yup.object().shape({
       name: Yup.string(),
-      category_id: Yup.string().nullable()
     })
 
     try {
@@ -58,35 +49,38 @@ class CategoryController {
     }
 
     const { id } = request.params
-    const { name, category_id } = request.body
+    const { name } = request.body
     const { filename: path } = request.file || {}
 
-    const category = await Category.findByPk(id)
+    const category = await Category.findOne({ id })
 
     if (!category) {
       return response.status(404).json({ error: 'Category not found' })
     }
 
-    await category.update({
-      name,
-      category_id,
-      path: path || category.path,
-    })
+    const updatedCategory = await Category.findOneAndUpdate(
+      { id },
+      {
+        name: name || category.name,
+        path: path || category.path,
+      },
+      { new: true }
+    )
 
-    return response.json(category)
+    return response.json(updatedCategory)
   }
 
   async delete(request, response) {
     try {
       const { id } = request.params
 
-      const category = await Category.findByPk(id)
+      const category = await Category.findOne({ id })
 
       if (!category) {
         return response.status(404).json({ error: 'Category not found' })
       }
 
-      await category.destroy()
+      await Category.deleteOne({ id })
 
       return response.status(204).send()
     } catch (err) {

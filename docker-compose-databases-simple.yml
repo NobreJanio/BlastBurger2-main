@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database - Nova instância
+  postgres-new:
+    image: postgres:17-alpine
+    container_name: blastburger-postgres-new
+    restart: unless-stopped
+    ports:
+      - '5460:5432'  # Nova porta externa para evitar conflitos
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=POSTGRES
+      - POSTGRES_DB=blastburger_new
+    volumes:
+      - postgres_data_additional:/var/lib/postgresql/data
+    networks:
+      - blastburger-databases-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MongoDB Database - Nova instância
+  mongodb-new:
+    image: mongo:7-jammy
+    container_name: blastburger-mongodb-new
+    restart: unless-stopped
+    ports:
+      - '27040:27017'  # Nova porta externa para evitar conflitos
+    environment:
+      - MONGO_INITDB_DATABASE=blastburger_new
+    volumes:
+      - mongodb_data_additional:/data/db
+    networks:
+      - blastburger-databases-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  blastburger-databases-network:
+    driver: bridge
+
+volumes:
+  postgres_data_additional:
+    driver: local
+  mongodb_data_additional:
+    driver: local

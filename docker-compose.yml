@@ -7,7 +7,7 @@ services:
     container_name: blastburger-postgres
     restart: unless-stopped
     ports:
-      - '5436:5432'  # Porta externa diferente da atual (5435)
+      - '5450:5432'  # Porta externa alterada para evitar conflitos
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=POSTGRES
@@ -28,7 +28,7 @@ services:
     container_name: blastburger-mongodb
     restart: unless-stopped
     ports:
-      - '27020:27017'  # Porta externa diferente da atual (27019)
+      - '27030:27017'  # Porta externa alterada para evitar conflitos
     environment:
       - MONGO_INITDB_DATABASE=blastburger
     volumes:

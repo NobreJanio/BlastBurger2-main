@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
-import Product from '../models/Product.js'
-import Category from '../models/Category.js'
+import { v4 } from 'uuid'
+import Product from '../schemas/Product.js'
+import Category from '../schemas/Category.js'
 
 class ProductController {
   async store(request, response) {
@@ -18,19 +19,24 @@ class ProductController {
     }
 
     try {
-      const { filename: path } = request.file
       const { name, price, category_id, offer } = request.body
+      const { filename: path } = request.file || {}
 
       if (!path) {
         return response.status(400).json({ error: 'Please provide a product image' })
       }
 
+      // Buscar categoria para incluir os dados
+      const category = await Category.findOne({ id: category_id })
+
       const product = await Product.create({
+        id: v4(),
         name,
-        price,
+        price: parseFloat(price),
         category_id,
         path,
         offer: offer || false,
+        category: category ? { id: category.id, name: category.name } : null,
       })
 
       return response.json(product)
@@ -42,15 +48,7 @@ class ProductController {
 
   async index(request, response) {
     try {
-      const products = await Product.findAll({
-        include: [
-          {
-            model: Category,
-            as: 'category',
-            attributes: ['id', 'name'],
-          },
-        ],
-      })
+      const products = await Product.find({})
 
       return response.json(products)
     } catch (err) {
@@ -77,7 +75,7 @@ class ProductController {
       const { id } = request.params
       const { name, price, category_id, offer } = request.body
 
-      const product = await Product.findByPk(id)
+      const product = await Product.findOne({ id })
 
       if (!product) {
         return response.status(404).json({ error: 'Product not found' })
@@ -88,15 +86,27 @@ class ProductController {
         path = request.file.filename
       }
 
-      await product.update({
-        name,
-        price,
-        category_id,
-        path: path || product.path,
-        offer: offer !== undefined ? offer : product.offer,
-      })
+      // Buscar categoria se category_id foi fornecido
+      let category = product.category
+      if (category_id && category_id !== product.category_id) {
+        const categoryData = await Category.findOne({ id: category_id })
+        category = categoryData ? { id: categoryData.id, name: categoryData.name } : null
+      }
 
-      return response.json(product)
+      const updatedProduct = await Product.findOneAndUpdate(
+        { id },
+        {
+          name: name || product.name,
+          price: price !== undefined ? parseFloat(price) : product.price,
+          category_id: category_id || product.category_id,
+          path: path || product.path,
+          offer: offer !== undefined ? offer : product.offer,
+          category: category,
+        },
+        { new: true }
+      )
+
+      return response.json(updatedProduct)
     } catch (err) {
       console.error(err)
       return response.status(500).json({ error: 'Internal server error' })
@@ -107,13 +117,13 @@ class ProductController {
     try {
       const { id } = request.params
 
-      const product = await Product.findByPk(id)
+      const product = await Product.findOne({ id })
 
       if (!product) {
         return response.status(404).json({ error: 'Product not found' })
       }
 
-      await product.destroy()
+      await Product.deleteOne({ id })
 
       return response.status(204).send()
     } catch (err) {
